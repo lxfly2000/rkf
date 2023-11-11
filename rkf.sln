@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.34031.82
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rkf", "rkf\rkf.vcxproj", "{7F980EE9-A698-4D46-8CB3-BA8619F30FEC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui", "gui\gui.vcxproj", "{E9323C9D-43B2-4F23-8D18-C8219528E08B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7F980EE9-A698-4D46-8CB3-BA8619F30FEC}.Debug|x64.ActiveCfg = Debug|x64
+		{7F980EE9-A698-4D46-8CB3-BA8619F30FEC}.Debug|x64.Build.0 = Debug|x64
+		{7F980EE9-A698-4D46-8CB3-BA8619F30FEC}.Debug|x86.ActiveCfg = Debug|x64
+		{7F980EE9-A698-4D46-8CB3-BA8619F30FEC}.Release|x64.ActiveCfg = Release|x64
+		{7F980EE9-A698-4D46-8CB3-BA8619F30FEC}.Release|x64.Build.0 = Release|x64
+		{7F980EE9-A698-4D46-8CB3-BA8619F30FEC}.Release|x86.ActiveCfg = Release|x64
+		{E9323C9D-43B2-4F23-8D18-C8219528E08B}.Debug|x64.ActiveCfg = Debug|x64
+		{E9323C9D-43B2-4F23-8D18-C8219528E08B}.Debug|x64.Build.0 = Debug|x64
+		{E9323C9D-43B2-4F23-8D18-C8219528E08B}.Debug|x86.ActiveCfg = Debug|Win32
+		{E9323C9D-43B2-4F23-8D18-C8219528E08B}.Debug|x86.Build.0 = Debug|Win32
+		{E9323C9D-43B2-4F23-8D18-C8219528E08B}.Release|x64.ActiveCfg = Release|x64
+		{E9323C9D-43B2-4F23-8D18-C8219528E08B}.Release|x64.Build.0 = Release|x64
+		{E9323C9D-43B2-4F23-8D18-C8219528E08B}.Release|x86.ActiveCfg = Release|Win32
+		{E9323C9D-43B2-4F23-8D18-C8219528E08B}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6CAB335E-4B0E-4E9C-8BAD-EF87153D0FD6}
+	EndGlobalSection
+EndGlobal
