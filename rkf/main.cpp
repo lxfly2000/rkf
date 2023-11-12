@@ -185,9 +185,13 @@ int previewFile(string path)
 		cerr << "Error opening file." << endl;
 		return -1;
 	}
-	cout << path << " :\nFPS: " << v.get(CAP_PROP_FPS);
 	Mat m;
-	v.read(m);
+	if (!v.read(m))
+	{
+		cerr << "Error reading file." << endl;
+		return -2;
+	}
+	cout << path << " :\nFPS: " << v.get(CAP_PROP_FPS);
 	cout << "\nWidth: " << m.cols << "\nHeight: " << m.rows << endl;
 	const string windowName = "Preview";
 	const string trackTime = "Frame";
