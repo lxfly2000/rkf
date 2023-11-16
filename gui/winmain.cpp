@@ -145,6 +145,7 @@ BOOL RKF(HWND hWnd)
 
 	TCHAR cmd[1024] = TEXT("");
 	wsprintf(cmd, TEXT("RKF \"%S\" %d %d %d %d %s"), path, l, t, w, h, simStr);
+	ULONGLONG tickStart = GetTickCount64();
 	if (!CreateProcess(TEXT("RKF.EXE"), cmd, NULL, NULL, TRUE, 0, NULL, NULL, &st, &pi))
 	{
 		HRCHECK(GetLastError());
@@ -167,7 +168,11 @@ BOOL RKF(HWND hWnd)
 			cp = regionStr.find("\n");
 			if (regionStr[cp - 1] == '\r')
 				cp--;
-			regionStr = "文件已输出至：\n" + regionStr.substr(0, cp);
+			char timefmt[16] = "";
+			ULONGLONG timeDelta = GetTickCount64() - tickStart;
+			sprintf_s(timefmt, "%02I64u:%02I64u:%02I64u.%03I64u",
+				timeDelta / 3600000, (timeDelta / 60000) % 60, (timeDelta / 1000) % 60, timeDelta % 1000);
+			regionStr = "文件已输出至：\n" + regionStr.substr(0, cp) + "\n运行时长：" + timefmt;
 			MessageBoxA(hWnd, regionStr.c_str(), "RKF", MB_ICONINFORMATION);
 			return TRUE;
 		}

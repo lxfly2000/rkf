@@ -4,12 +4,6 @@
 #include<sstream>
 #include<vector>
 
-#ifdef _DEBUG
-#pragma comment(lib,"opencv_world460d.lib")
-#else
-#pragma comment(lib,"opencv_world460.lib")
-#endif
-
 using namespace cv;
 using namespace std;
 
@@ -66,28 +60,27 @@ int recognizeKeyframe(string path, int x, int y, int w, int h, double similarity
 	namedWindow(windowName);
 	*fps = capture.get(CAP_PROP_FPS);
 	int totalFrames = capture.get(CAP_PROP_FRAME_COUNT);
-	int currentFrame = 0, chain = 0;
-	Mat wholeFrame, recognizeFramesChain[2];
+	int currentFrame = 1, chain = 0, previousChain = 1;
+	Mat recognizeFramesChain[2];
 	outframe->push_back(0);
-	while (capture.read(wholeFrame))
+	if (!capture.read(recognizeFramesChain[previousChain]))
+		return 0;
+	while (capture.read(recognizeFramesChain[chain]))
 	{
 		//https://www.delftstack.com/zh/howto/python/opencv-compare-images/
-		recognizeFramesChain[chain] = wholeFrame(Rect(x, y, w, h)).clone();
 		if (recognizeFramesChain[chain].type() != CV_8UC3)
 		{
 			cerr << "Unsupported frame type.\n";
 			return -1;
 		}
-		if (currentFrame > 0)
-		{
-			double errorL2 = norm(recognizeFramesChain[chain], recognizeFramesChain[(chain + 1) % 2], NORM_L2);
-			double frameSimilarity = 1 - errorL2 / (w*h);
-			if (frameSimilarity < similarity)
-				outframe->push_back(currentFrame);
-		}
+		double errorL2 = norm(recognizeFramesChain[chain](Rect(x, y, w, h)), recognizeFramesChain[previousChain](Rect(x, y, w, h)), NORM_L2);
+		double frameSimilarity = 1 - errorL2 / (w*h);
+		if (frameSimilarity < similarity)
+			outframe->push_back(currentFrame);
 		statusText.str("");
 		statusText << "Frame: " << currentFrame << "/" << totalFrames << " Keyframes: " << outframe->size();
-		showFrame(windowName, wholeFrame, x, y, w, h, statusText.str());
+		showFrame(windowName, recognizeFramesChain[chain], x, y, w, h, statusText.str());
+		previousChain = chain;
 		chain = (chain + 1) % 2;
 		currentFrame++;
 		if (pollKey() != -1)
