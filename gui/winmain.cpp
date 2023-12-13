@@ -1,3 +1,4 @@
+#include"common.h"
 #include<Windows.h>
 #include<CommCtrl.h>
 #include<iostream>
@@ -111,6 +112,23 @@ BOOL PreviewVideo(HWND hWnd)
 	return FALSE;
 }
 
+HMODULE hKernel = NULL;
+ULONGLONG(WINAPI*pGetTickCount64)() = NULL;
+
+void LoadDModule()
+{
+	hKernel = LoadLibrary(TEXT("kernel32.dll"));
+	if (hKernel)
+		pGetTickCount64 = (ULONGLONG(WINAPI*)())GetProcAddress(hKernel, "GetTickCount64");
+}
+
+ULONGLONG DGetTickCount()
+{
+	if (pGetTickCount64)
+		return pGetTickCount64();
+	return GetTickCount();
+}
+
 BOOL RKF(HWND hWnd)
 {
 	char path[MAX_PATH] = "";
@@ -145,7 +163,7 @@ BOOL RKF(HWND hWnd)
 
 	TCHAR cmd[1024] = TEXT("");
 	wsprintf(cmd, TEXT("RKF \"%S\" %d %d %d %d %s"), path, l, t, w, h, simStr);
-	ULONGLONG tickStart = GetTickCount64();
+	ULONGLONG tickStart = DGetTickCount();
 	if (!CreateProcess(TEXT("RKF.EXE"), cmd, NULL, NULL, TRUE, 0, NULL, NULL, &st, &pi))
 	{
 		HRCHECK(GetLastError());
@@ -169,7 +187,7 @@ BOOL RKF(HWND hWnd)
 			if (regionStr[cp - 1] == '\r')
 				cp--;
 			char timefmt[16] = "";
-			ULONGLONG timeDelta = GetTickCount64() - tickStart;
+			ULONGLONG timeDelta = DGetTickCount() - tickStart;
 			sprintf_s(timefmt, "%02I64u:%02I64u:%02I64u.%03I64u",
 				timeDelta / 3600000, (timeDelta / 60000) % 60, (timeDelta / 1000) % 60, timeDelta % 1000);
 			regionStr = "文件已输出至：\n" + regionStr.substr(0, cp) + "\n运行时长：" + timefmt;
@@ -238,5 +256,6 @@ INT_PTR CALLBACK DlgCallback(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR param, int iShow)
 {
+	LoadDModule();
 	return (int)DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), NULL, DlgCallback);
 }
