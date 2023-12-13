@@ -256,6 +256,7 @@ INT_PTR CALLBACK DlgCallback(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPWSTR param, int iShow)
 {
+	InitCommonControls();
 	LoadDModule();
 	return (int)DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG1), NULL, DlgCallback);
 }
